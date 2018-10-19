@@ -10,7 +10,7 @@ spec:
   ports:
   - protocol: TCP
     port: 8080
-    nodePort: 8081
+    nodePort: 8082
 
 ---
 
