@@ -51,7 +51,8 @@ app.get('/generate-cpu-load', function(req, res, next) {
     val += Math.sqrt(val);
   }
 	console.log('Doing a bunch of calculations!')
-  //res.status(200).send('Doing a bunch of calculations!')
+  res.status(200).send('Doing a bunch of calculations!')
+	next()
 });
 
 //this endpoint triggers the app to simulate entering an unhealthy state by causing it to return 5XX errors.
