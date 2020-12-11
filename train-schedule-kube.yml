@@ -12,7 +12,7 @@ spec:
     port: 8080
     nodePort: 8080
 
----
+------
 
 apiVersion: extensions/v1beta1
 kind: Deployment
