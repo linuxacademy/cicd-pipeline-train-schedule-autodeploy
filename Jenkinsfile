@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         //be sure to replace "willbla" with your own Docker Hub username
-        DOCKER_IMAGE_NAME = "willbla/train-schedule"
+        DOCKER_IMAGE_NAME = "therey/train-schedule"
         CANARY_REPLICAS = 0
     }
     stages {
@@ -57,6 +57,9 @@ pipeline {
         stage('SmokeTest') {
             when {
                 branch 'master'
+            }
+            environment { 
+                KUBE_MASTER_IP = 35.174.241.120
             }
             steps {
                 script {
