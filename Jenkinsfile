@@ -1,11 +1,17 @@
 pipeline {
     agent any
     environment {
+<<<<<<< HEAD
         //be sure to replace "willbla" with your own Docker Hub username
         DOCKER_IMAGE_NAME = "willbla/train-schedule"
+        CANARY_REPLICAS = 0
+=======
+        //be sure to replace "rawi27" with your own Docker Hub username
+        DOCKER_IMAGE_NAME = "rawi27/train-schedule"
+>>>>>>> master
     }
     stages {
-        stage('Build') {
+        stage('BUild') {
             steps {
                 echo 'Running build automation'
                 sh './gradlew build --no-daemon'
@@ -53,21 +59,29 @@ pipeline {
                 )
             }
         }
+        stage('SmokeTest') {
+            when {
+                branch 'master'
+            }
+            steps {
+                script {
+                    sleep (time: 5)
+                    def response = httpRequest (
+                        url: "http://$KUBE_MASTER_IP:8081/",
+                        timeout: 30
+                    )
+                    if (response.status != 200) {
+                        error("Smoke test against canary deployment failed.")
+                    }
+                }
+            }
+        }
         stage('DeployToProduction') {
             when {
                 branch 'master'
             }
-            environment { 
-                CANARY_REPLICAS = 0
-            }
             steps {
-                input 'Deploy to Production?'
                 milestone(1)
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'train-schedule-kube-canary.yml',
-                    enableConfigSubstitution: true
-                )
                 kubernetesDeploy(
                     kubeconfigId: 'kubeconfig',
                     configs: 'train-schedule-kube.yml',
@@ -76,4 +90,16 @@ pipeline {
             }
         }
     }
+<<<<<<< HEAD
+    post {
+        cleanup {
+            kubernetesDeploy (
+                kubeconfigId: 'kubeconfig',
+                configs: 'train-schedule-kube-canary.yml',
+                enableConfigSubstitution: true
+            )
+        }
+    }
+=======
+>>>>>>> master
 }
