@@ -1,12 +1,17 @@
 pipeline {
     agent any
     environment {
+<<<<<<< HEAD
         //be sure to replace "willbla" with your own Docker Hub username
         DOCKER_IMAGE_NAME = "willbla/train-schedule"
         CANARY_REPLICAS = 0
+=======
+        //be sure to replace "rawi27" with your own Docker Hub username
+        DOCKER_IMAGE_NAME = "rawi27/train-schedule"
+>>>>>>> master
     }
     stages {
-        stage('Build') {
+        stage('BUild') {
             steps {
                 echo 'Running build automation'
                 sh './gradlew build --no-daemon'
@@ -85,6 +90,7 @@ pipeline {
             }
         }
     }
+<<<<<<< HEAD
     post {
         cleanup {
             kubernetesDeploy (
@@ -94,4 +100,6 @@ pipeline {
             )
         }
     }
+=======
+>>>>>>> master
 }
