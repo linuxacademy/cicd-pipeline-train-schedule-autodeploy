@@ -1,19 +1,24 @@
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   name: train-schedule-service
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
 spec:
-  type: NodePort
+  ports:
+    - port: 8090
+      targetPort: 8080
+      protocol: TCP
+  type: LoadBalancer
   selector:
     app: train-schedule
-  ports:
-  - protocol: TCP
-    port: 8080
-    nodePort: 8080
+
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: train-schedule-deployment
